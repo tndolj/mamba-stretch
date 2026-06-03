@@ -965,7 +965,7 @@ document.addEventListener('keydown', e=>{
   else if (e.key === ' '){ e.preventDefault(); if(!player.classList.contains('complete')) setPlaying(!running); }
   else if (e.key === 'ArrowRight'){ document.getElementById('plNext').click(); }
   else if (e.key === 'ArrowLeft'){ back(); }
-  else if (e.key === 'Tab'){
+  else if (e.key === 'Tab' && player.classList.contains('open')){
     // trap focus inside the modal — only visible buttons participate
     const vis = [...player.querySelectorAll('button')].filter(el=> el.offsetParent !== null);
     if (!vis.length) return;
@@ -974,6 +974,13 @@ document.addEventListener('keydown', e=>{
     else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
   }
 });
+
+/* ---------- PWA service worker ---------- */
+if ('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  });
+}
 </script>
 </body>
 </html>
