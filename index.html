@@ -115,7 +115,8 @@
 
   /* ---------- PROGRESS BAR ---------- */
   .progress-wrap{
-    position:sticky;top:0;z-index:30;margin:0 -22px 0;padding:13px 22px;
+    position:sticky;top:0;z-index:30;margin:0 -22px 0;
+    padding:calc(13px + env(safe-area-inset-top)) 22px 13px;
     backdrop-filter:blur(14px);background:rgba(10,10,11,.74);
     border-bottom:1px solid var(--line);
     display:flex;align-items:center;gap:16px;
@@ -233,7 +234,8 @@
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
   .pl-top{
-    display:flex;align-items:center;gap:16px;padding:18px 22px;
+    display:flex;align-items:center;gap:16px;
+    padding:calc(18px + env(safe-area-inset-top)) 22px 18px;
     max-width:680px;margin:0 auto;width:100%;
   }
   .pl-pill{
@@ -344,7 +346,7 @@
     .sub{font-size:1rem}
     .card{padding:16px 16px 16px 18px;gap:14px}
     .progress-label,.meter-label{display:none}
-    .progress-wrap{gap:12px;padding:11px 18px}
+    .progress-wrap{gap:12px;padding:calc(11px + env(safe-area-inset-top)) 18px 11px}
     .meter{gap:9px}
     .progress-count{font-size:.95rem;min-width:40px}
     .cta-row{flex-direction:column;width:100%}
