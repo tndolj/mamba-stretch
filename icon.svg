@@ -1,62 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Mamba Stretch icon">
   <defs>
-    <radialGradient id="bg" cx="78%" cy="6%" r="120%">
-      <stop offset="0%" stop-color="#1b1a16"/>
-      <stop offset="55%" stop-color="#0a0a0b"/>
-      <stop offset="100%" stop-color="#070708"/>
-    </radialGradient>
-    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#f9d27a"/>
-      <stop offset="50%" stop-color="#f3b425"/>
-      <stop offset="100%" stop-color="#d9930a"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#202024"></stop><stop offset="1" stop-color="#0b0b0d"></stop>
     </linearGradient>
+    <linearGradient id="s" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#ffe6a3"></stop><stop offset="0.5" stop-color="#f3b425"></stop><stop offset="1" stop-color="#d49410"></stop>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.76" cy="0.18" r="0.95">
+      <stop offset="0" stop-color="#7c6cf0" stop-opacity="0.26"></stop><stop offset="0.55" stop-color="#7c6cf0" stop-opacity="0"></stop>
+    </radialGradient>
   </defs>
-
-  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
-
-  <g transform="translate(256 256) scale(0.84) translate(-252 -250)">
-
-    <!-- forked tongue (behind head, flicking from snout) -->
-    <g stroke="#e23b2e" stroke-width="6" stroke-linecap="round" fill="none">
-      <path d="M 188 100 C 182 78, 176 66, 170 52"/>
-      <path d="M 170 52 L 158 38"/>
-      <path d="M 170 52 L 180 36"/>
-    </g>
-
-    <!-- HEAD: sleek arrow snake head, raised -->
-    <path d="M 201 206
-             C 178 196, 168 168, 172 140
-             C 175 116, 182 100, 192 96
-             C 204 92, 214 110, 217 134
-             C 220 160, 218 192, 210 204
-             Z" fill="url(#gold)"/>
-
-    <!-- BODY: smooth tapered S, neck -> fine tail (generated outline) -->
-    <path id="bodyShape" fill="url(#gold)" d="M 200.4 209.7 L 216.7 211.6 L 231.6 213.8 L 245.3 216.4 L 257.7 219.2 L 269.0 222.3 L 279.0 225.6 L 287.8 229.1 L 295.5 232.6 L 302.2 236.2 L 307.8 239.9 L 312.4 243.5 L 316.2 247.1 L 319.2 250.6 L 321.6 254.2 L 323.4 257.9 L 324.7 261.8 L 325.5 266.1 L 325.6 270.7 L 325.1 275.7 L 323.8 281.0 L 321.8 286.7 L 319.2 292.3 L 315.7 297.8 L 311.7 303.1 L 307.1 308.4 L 301.9 313.4 L 296.2 318.4 L 289.9 323.2 L 283.2 327.9 L 276.0 332.6 L 268.4 337.1 L 260.5 341.6 L 252.2 346.0 L 243.6 350.4 L 234.8 354.9 L 225.7 359.3 L 216.5 363.9 L 207.0 368.5 L 197.5 373.3 L 187.8 378.2 L 178.1 383.3 L 168.4 388.6 L 158.6 394.1 L 148.7 399.8 L 151.3 404.2 L 161.1 398.8 L 171.0 393.8 L 181.0 389.1 L 190.9 384.7 L 200.8 380.5 L 210.6 376.5 L 220.3 372.7 L 229.9 369.0 L 239.4 365.4 L 248.7 361.8 L 257.8 358.2 L 266.7 354.7 L 275.4 351.0 L 283.9 347.3 L 292.1 343.4 L 300.0 339.3 L 307.7 335.0 L 315.0 330.4 L 322.1 325.4 L 328.7 320.0 L 335.0 314.1 L 340.8 307.7 L 346.2 300.2 L 350.7 292.6 L 354.3 284.8 L 357.1 276.6 L 358.9 268.1 L 359.5 259.3 L 359.0 250.3 L 357.2 241.3 L 354.0 232.5 L 349.7 223.8 L 344.1 215.5 L 337.4 207.6 L 329.5 200.0 L 320.6 192.9 L 310.6 186.2 L 299.6 179.9 L 287.4 174.0 L 274.2 168.5 L 259.8 163.3 L 244.2 158.6 L 227.5 154.3 L 209.6 150.3 Z"/>
-
-    <!-- scale texture: chevron bands following body curve, clipped to body -->
-    <clipPath id="bodyclip"><use href="#bodyShape"/></clipPath>
-    <g clip-path="url(#bodyclip)" fill="none" stroke="#a86c08" stroke-width="3.2" stroke-linecap="round" opacity="0.42">
-      <path d="M 238.9 210.6 Q 260.9 191.8 250.2 165.0"/>
-      <path d="M 269.2 218.1 Q 291.5 203.2 284.6 177.3"/>
-      <path d="M 292.4 226.9 Q 314.8 216.4 312.2 191.8"/>
-      <path d="M 308.9 236.4 Q 331.1 231.2 333.4 208.5"/>
-      <path d="M 319.6 246.1 Q 340.5 246.9 348.0 227.5"/>
-      <path d="M 325.7 255.9 Q 343.5 262.7 355.7 248.1"/>
-      <path d="M 328.2 266.8 Q 341.4 277.8 356.1 268.8"/>
-      <path d="M 326.7 279.5 Q 335.2 292.3 350.2 288.3"/>
-      <path d="M 320.9 293.5 Q 325.4 306.5 339.1 306.5"/>
-      <path d="M 311.0 306.8 Q 312.7 318.8 324.5 321.1"/>
-      <path d="M 297.8 319.2 Q 297.7 329.7 307.6 333.2"/>
-      <path d="M 281.5 330.7 Q 280.5 339.7 288.7 343.5"/>
-      <path d="M 262.8 341.6 Q 261.5 349.1 268.2 352.8"/>
-      <path d="M 242.1 352.3 Q 240.8 358.5 246.2 361.7"/>
-      <path d="M 219.9 363.1 Q 218.8 368.1 223.2 370.7"/>
-      <path d="M 196.7 374.4 Q 195.9 378.4 199.4 380.4"/>
-      <path d="M 172.9 386.6 Q 172.4 389.8 175.2 391.2"/>
-    </g>
-
-    <!-- eye -->
-    <ellipse cx="195" cy="148" rx="8" ry="12" transform="rotate(20 195 148)" fill="#0a0a0b"/>
+  <rect width="512" height="512" rx="118" fill="url(#bg)"></rect>
+  <rect width="512" height="512" rx="118" fill="url(#glow)"></rect>
+  <g transform="translate(256 256) rotate(-9) skewX(-7) translate(-256 -256)">
+    <path d="M 344 170 C 344 120 270 108 214 132 C 150 160 168 226 256 256 C 344 286 362 352 298 380 C 242 404 168 392 168 342" fill="none" stroke="url(#s)" stroke-width="86" stroke-linecap="round" stroke-linejoin="round"></path>
   </g>
 </svg>
