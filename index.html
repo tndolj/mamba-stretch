@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mamba Stretch Routine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0a0a0b;
+    --panel:#121214;
+    --panel-2:#191a1d;
+    --line:#2a2b2f;
+    --line-2:#3a3b40;
+    --gold:#f3b425;
+    --gold-soft:#f9d27a;
+    --paper:#ece8df;
+    --muted:#8c8d92;
+    --pre:#f3b425;
+    --post:#7c6cf0;
+    --post-soft:#b3a7ff;
+    --good:#3ad29f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(120% 60% at 80% -10%, rgba(243,180,37,.10), transparent 60%),
+      radial-gradient(90% 50% at 0% 110%, rgba(124,108,240,.12), transparent 60%),
+      var(--ink);
+    color:var(--paper);
+    font-family:'Archivo',system-ui,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    overflow-x:hidden;
+    text-rendering:optimizeLegibility;
+  }
+  button{touch-action:manipulation}
+  .grain{
+    position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.04;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 22px 120px;position:relative;z-index:2}
+
+  /* ---------- HERO ---------- */
+  header{padding:72px 0 38px;position:relative}
+  .kicker{
+    font-size:.74rem;letter-spacing:.42em;text-transform:uppercase;
+    color:var(--gold);font-weight:700;margin-bottom:18px;
+    display:inline-flex;align-items:center;gap:11px;
+    opacity:0;animation:rise .7s .05s forwards;
+  }
+  .kicker::before{content:"";width:26px;height:2px;background:var(--gold)}
+  h1{
+    font-family:'Anton',sans-serif;font-weight:400;
+    font-size:clamp(3.4rem,13vw,7.5rem);line-height:.86;
+    letter-spacing:.01em;text-transform:uppercase;
+  }
+  h1 .line{display:block;overflow:hidden;padding:.02em 0}
+  h1 .line span{display:block;transform:translateY(105%);animation:slideUp .8s cubic-bezier(.22,1,.36,1) forwards}
+  h1 .line:nth-child(2) span{animation-delay:.12s}
+  h1 .gold{color:var(--gold);-webkit-text-stroke:0}
+  h1 .outline{color:transparent;-webkit-text-stroke:1.5px var(--paper)}
+  .sub{
+    margin-top:26px;max-width:50ch;color:var(--muted);font-size:1.04rem;
+    opacity:0;animation:rise .7s .5s forwards;
+  }
+  .sub b{color:var(--paper);font-weight:600}
+
+  .toc{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px;opacity:0;animation:rise .7s .65s forwards}
+  .toc a{
+    text-decoration:none;color:var(--paper);font-weight:600;font-size:.84rem;
+    letter-spacing:.04em;text-transform:uppercase;
+    padding:11px 18px;border:1px solid var(--line);border-radius:100px;
+    display:inline-flex;align-items:center;gap:9px;transition:.25s;
+  }
+  .toc a .dot{width:8px;height:8px;border-radius:50%}
+  .toc a.pre .dot{background:var(--pre)}
+  .toc a.post .dot{background:var(--post)}
+  .toc a:hover{border-color:var(--paper);transform:translateY(-2px)}
+
+  /* ---------- CTA (Start session) ---------- */
+  .cta-row{display:flex;gap:13px;flex-wrap:wrap;margin-top:18px;opacity:0;animation:rise .7s .8s forwards}
+  .btn-primary{
+    font-family:'Archivo';font-weight:800;font-size:.92rem;letter-spacing:.08em;text-transform:uppercase;
+    background:linear-gradient(180deg,var(--gold-soft),var(--gold));color:#1c1404;
+    border:none;border-radius:100px;padding:15px 26px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:11px;transition:.22s;
+    box-shadow:0 10px 30px -10px rgba(243,180,37,.5);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 38px -12px rgba(243,180,37,.65)}
+  .btn-primary svg{width:18px;height:18px;fill:#1c1404}
+  .btn-primary.post{background:linear-gradient(180deg,var(--post-soft),var(--post));color:#fff;box-shadow:0 10px 30px -10px rgba(124,108,240,.55)}
+  .btn-primary.post:hover{box-shadow:0 16px 38px -12px rgba(124,108,240,.7)}
+  .btn-primary.post svg{fill:#fff}
+  .btn-ghost{
+    font-family:'Archivo';font-weight:700;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;
+    background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:100px;
+    padding:14px 22px;cursor:pointer;transition:.22s;display:inline-flex;align-items:center;gap:9px;
+  }
+  .btn-ghost:hover{color:var(--paper);border-color:var(--line-2)}
+  .btn-ghost svg{width:15px;height:15px;stroke:currentColor;stroke-width:2.2;fill:none}
+
+  /* ---------- PROGRESS BAR ---------- */
+  .progress-wrap{
+    position:sticky;top:0;z-index:30;margin:0 -22px 0;padding:13px 22px;
+    backdrop-filter:blur(14px);background:rgba(10,10,11,.74);
+    border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:16px;
+  }
+  .meter{display:flex;align-items:center;gap:11px;flex:1;min-width:0}
+  .meter-label{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap;display:inline-flex;align-items:center;gap:7px}
+  .meter-label .dot{width:7px;height:7px;border-radius:50%}
+  .pre-meter .meter-label .dot{background:var(--pre)}
+  .post-meter .meter-label .dot{background:var(--post)}
+  .meter-div{width:1px;align-self:stretch;background:var(--line)}
+  .bar{flex:1;height:7px;background:var(--panel-2);border-radius:100px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;border-radius:100px;transition:width .5s cubic-bezier(.22,1,.36,1)}
+  .pre-meter .bar i{background:linear-gradient(90deg,var(--gold),var(--gold-soft))}
+  .post-meter .bar i{background:linear-gradient(90deg,var(--post),var(--post-soft))}
+  .progress-count{font-family:'Anton',sans-serif;font-size:1.05rem;letter-spacing:.04em;min-width:46px;text-align:right;color:var(--muted)}
+  .pre-meter .progress-count b{color:var(--gold)}
+  .post-meter .progress-count b{color:var(--post-soft)}
+  .mini-reset{
+    background:transparent;border:none;color:#55565b;cursor:pointer;padding:5px;border-radius:8px;
+    display:grid;place-items:center;transition:.2s;
+  }
+  .mini-reset:hover{color:var(--paper);background:var(--panel-2)}
+  .mini-reset svg{width:16px;height:16px;stroke:currentColor;stroke-width:2.2;fill:none}
+
+  /* ---------- SECTION ---------- */
+  section{margin-top:56px;scroll-margin-top:72px}
+  .sec-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+  .sec-num{font-family:'Anton',sans-serif;font-size:1.1rem;color:var(--muted)}
+  .sec-head h2{
+    font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;
+    font-size:clamp(2rem,7vw,3.4rem);line-height:1;letter-spacing:.01em;
+  }
+  .pre h2 .accent{color:var(--pre)}
+  .post h2 .accent{color:var(--post-soft)}
+  .sec-meta{display:flex;gap:20px;flex-wrap:wrap;margin:14px 0 30px;color:var(--muted);font-size:.9rem}
+  .sec-meta span{display:inline-flex;align-items:center;gap:7px}
+  .sec-meta b{color:var(--paper);font-weight:600}
+  .tag{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;padding:5px 11px;border-radius:6px}
+  .tag.dyn{background:rgba(243,180,37,.14);color:var(--gold)}
+  .tag.stat{background:rgba(124,108,240,.20);color:var(--post-soft)}
+
+  /* ---------- CARDS ---------- */
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    padding:20px 20px 20px 22px;margin-bottom:13px;position:relative;overflow:hidden;
+    display:flex;gap:18px;align-items:flex-start;transition:transform .3s,border-color .3s,opacity .3s;
+  }
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--rail,var(--line));transition:.3s}
+  .pre .card{--rail:var(--pre)}
+  .post .card{--rail:var(--post)}
+  .card:hover{border-color:var(--line-2);transform:translateX(3px)}
+  .card.active{border-color:var(--rail);box-shadow:0 0 0 1px var(--rail), 0 18px 40px -22px var(--rail)}
+  .card.done{opacity:.5}
+  .card.done .ex-name{text-decoration:line-through;text-decoration-color:var(--muted)}
+
+  .check{
+    flex:none;width:30px;height:30px;border-radius:9px;border:2px solid var(--line);
+    background:var(--panel-2);cursor:pointer;display:grid;place-items:center;
+    transition:.2s;margin-top:2px;
+  }
+  .check:hover{border-color:var(--good)}
+  .check svg{width:16px;height:16px;stroke:var(--ink);stroke-width:3.5;fill:none;opacity:0;transform:scale(.4);transition:.2s}
+  .card.done .check{background:var(--good);border-color:var(--good)}
+  .card.done .check svg{opacity:1;transform:scale(1)}
+
+  .ex-body{flex:1;min-width:0}
+  .ex-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .ex-name{font-weight:700;font-size:1.08rem;letter-spacing:-.01em;cursor:pointer}
+  .ex-dose{font-family:'Anton',sans-serif;font-size:.92rem;letter-spacing:.03em;color:var(--gold);white-space:nowrap}
+  .post .ex-dose{color:var(--post-soft)}
+  .ex-note{color:var(--muted);font-size:.92rem;margin-top:5px}
+  .ex-note .why{color:var(--gold-soft);font-style:italic}
+
+  .timer-btn{
+    margin-top:12px;font-family:'Archivo';font-weight:700;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
+    background:transparent;color:var(--post-soft);border:1px solid #3a3450;border-radius:100px;
+    padding:8px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.2s;
+  }
+  .timer-btn:hover{background:rgba(124,108,240,.15);border-color:var(--post)}
+  .timer-btn.running{background:var(--post);color:#fff;border-color:var(--post)}
+  .timer-btn .t{font-variant-numeric:tabular-nums;min-width:42px;text-align:left}
+
+  /* ---------- TIP ---------- */
+  .tip{
+    background:linear-gradient(135deg,rgba(243,180,37,.08),rgba(124,108,240,.06));
+    border:1px dashed var(--line);border-radius:16px;padding:22px 24px;margin-top:20px;
+  }
+  .tip h3{font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:9px}
+  .tip p{color:var(--muted);font-size:.95rem}
+  .tip p b{color:var(--paper)}
+
+  /* ---------- QUOTE / FOOTER ---------- */
+  .quote{margin-top:70px;text-align:center;padding:50px 0 10px;border-top:1px solid var(--line)}
+  .quote blockquote{font-family:'Anton',sans-serif;font-size:clamp(1.6rem,5vw,2.6rem);line-height:1.05;text-transform:uppercase;letter-spacing:.01em}
+  .quote blockquote em{color:var(--gold);font-style:normal}
+  .quote cite{display:block;margin-top:18px;color:var(--muted);font-style:normal;letter-spacing:.2em;text-transform:uppercase;font-size:.74rem}
+  footer{text-align:center;color:#55565b;font-size:.78rem;margin-top:46px;line-height:1.7}
+
+  /* ---------- REVEAL ON SCROLL ---------- */
+  .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  @keyframes slideUp{to{transform:translateY(0)}}
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+
+  /* ======================================================
+     GUIDED SESSION PLAYER
+     ====================================================== */
+  .player{
+    position:fixed;inset:0;height:100dvh;z-index:100;display:none;
+    background:rgba(8,8,9,.86);backdrop-filter:blur(20px);
+    flex-direction:column;overflow:hidden;
+  }
+  .player.open{display:flex;animation:fadeIn .35s ease}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+  .pl-top{
+    display:flex;align-items:center;gap:16px;padding:18px 22px;
+    max-width:680px;margin:0 auto;width:100%;
+  }
+  .pl-pill{
+    font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+    padding:6px 13px;border-radius:100px;white-space:nowrap;
+  }
+  .pl-pill.dyn{background:rgba(243,180,37,.16);color:var(--gold)}
+  .pl-pill.stat{background:rgba(124,108,240,.22);color:var(--post-soft)}
+  .pl-counter{font-family:'Anton',sans-serif;font-size:1rem;letter-spacing:.05em;color:var(--muted)}
+  .pl-counter b{color:var(--paper)}
+  .pl-close{
+    margin-left:auto;background:transparent;border:none;color:var(--muted);cursor:pointer;
+    width:38px;height:38px;border-radius:10px;display:grid;place-items:center;transition:.2s;
+  }
+  .pl-close:hover{color:var(--paper);background:rgba(255,255,255,.06)}
+  .pl-close svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.4;fill:none}
+
+  /* segmented step track */
+  .pl-track{display:flex;gap:4px;max-width:680px;margin:0 auto;width:100%;padding:0 22px}
+  .pl-seg{flex:1;height:4px;border-radius:100px;background:var(--panel-2);overflow:hidden}
+  .pl-seg i{display:block;height:100%;width:0;background:var(--gold);border-radius:100px}
+  .pl-seg.post i{background:var(--post)}
+  .pl-seg.done i{width:100%}
+
+  .pl-stage{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:20px 24px;max-width:680px;margin:0 auto;width:100%;gap:6px;
+  }
+  .pl-side{
+    font-family:'Anton',sans-serif;font-size:1rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--post-soft);min-height:1.4em;
+  }
+  .pl-name{
+    font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;
+    font-size:clamp(2.2rem,8vw,4rem);line-height:.95;letter-spacing:.01em;
+    transition:opacity .3s;
+  }
+  .pl-dose{font-family:'Anton',sans-serif;font-size:1.05rem;letter-spacing:.04em;color:var(--gold);margin-top:4px}
+  .pl-note{color:var(--muted);font-size:1rem;max-width:42ch;margin:8px auto 0}
+
+  /* timer ring */
+  .ring-wrap{position:relative;width:230px;height:230px;margin:26px auto 6px}
+  .ring{transform:rotate(-90deg);width:100%;height:100%}
+  .ring circle{fill:none;stroke-width:9;stroke-linecap:round}
+  .ring .bg{stroke:var(--panel-2)}
+  .ring .fg{stroke:var(--gold);transition:stroke-dashoffset .95s linear,stroke .3s}
+  .ring-center{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .ring-time{font-family:'Anton',sans-serif;font-size:3.6rem;line-height:1;font-variant-numeric:tabular-nums}
+  .ring-sub{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+  .ring-wrap.pulse .ring-time{animation:pop .4s ease}
+  @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+
+  .pl-controls{
+    display:flex;align-items:center;justify-content:center;gap:18px;
+    padding:14px 24px max(30px,env(safe-area-inset-bottom));max-width:680px;margin:0 auto;width:100%;
+  }
+  .pl-btn{
+    background:transparent;border:1px solid var(--line);color:var(--paper);cursor:pointer;
+    border-radius:100px;display:grid;place-items:center;transition:.2s;
+  }
+  .pl-btn:hover{border-color:var(--paper);background:rgba(255,255,255,.05)}
+  .pl-btn.side{width:54px;height:54px}
+  .pl-btn.side svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.4;fill:none}
+  .pl-btn.main{
+    width:78px;height:78px;background:linear-gradient(180deg,var(--gold-soft),var(--gold));border:none;
+    box-shadow:0 12px 30px -12px rgba(243,180,37,.6);
+  }
+  .pl-btn.main svg{width:28px;height:28px;fill:#1c1404;stroke:none}
+  .player.stat-mode .pl-btn.main{background:linear-gradient(180deg,var(--post-soft),var(--post));box-shadow:0 12px 30px -12px rgba(124,108,240,.6)}
+  .player.stat-mode .pl-btn.main svg{fill:#fff}
+  .player.stat-mode .ring .fg{stroke:var(--post)}
+  .player.stat-mode .pl-dose{color:var(--post-soft)}
+  .pl-foot{text-align:center;padding-bottom:24px;color:#55565b;font-size:.74rem;letter-spacing:.04em}
+  .pl-foot kbd{background:var(--panel-2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-family:inherit;color:var(--muted);font-size:.72rem}
+
+  /* get-ready countdown */
+  .pl-ready{
+    position:absolute;inset:0;z-index:5;display:none;flex-direction:column;align-items:center;justify-content:center;
+    background:rgba(8,8,9,.6);backdrop-filter:blur(4px);
+  }
+  .pl-ready.show{display:flex}
+  .pl-ready .lbl{font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .pl-ready .num{font-family:'Anton',sans-serif;font-size:9rem;line-height:1;color:var(--gold)}
+
+  /* complete screen */
+  .pl-complete{display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;flex:1;gap:18px;padding:24px}
+  .player.complete .pl-stage,.player.complete .pl-controls,.player.complete .pl-track,.player.complete .pl-foot{display:none}
+  .player.complete .pl-complete{display:flex}
+  .pl-complete .big{font-family:'Anton',sans-serif;font-size:clamp(2.6rem,9vw,4.6rem);text-transform:uppercase;line-height:.9}
+  .pl-complete .big em{color:var(--gold);font-style:normal}
+  .pl-complete p{color:var(--muted);max-width:34ch}
+
+  /* completion celebration toast on main page */
+  .celebrate{
+    position:fixed;left:50%;top:24px;transform:translateX(-50%) translateY(-140%);z-index:90;
+    background:linear-gradient(180deg,var(--gold-soft),var(--gold));color:#1c1404;
+    font-family:'Anton',sans-serif;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;
+    padding:14px 26px;border-radius:100px;box-shadow:0 20px 50px -16px rgba(243,180,37,.6);
+    transition:transform .5s cubic-bezier(.22,1.4,.36,1);white-space:nowrap;
+  }
+  .celebrate.show{transform:translateX(-50%) translateY(0)}
+
+  @media (max-width:560px){
+    .wrap{padding:0 18px 90px}
+    header{padding:44px 0 26px}
+    .sub{font-size:1rem}
+    .card{padding:16px 16px 16px 18px;gap:14px}
+    .progress-label,.meter-label{display:none}
+    .progress-wrap{gap:12px;padding:11px 18px}
+    .meter{gap:9px}
+    .progress-count{font-size:.95rem;min-width:40px}
+    .cta-row{flex-direction:column;width:100%}
+    .cta-row .btn-primary,.cta-row .btn-ghost{width:100%;justify-content:center;padding:16px 22px}
+    .ring-wrap{width:min(74vw,260px);height:min(74vw,260px)}
+    .ring-time{font-size:3.1rem}
+    .pl-name{font-size:clamp(2rem,9vw,3.2rem)}
+    .pl-top,.pl-track,.pl-stage,.pl-controls{padding-left:18px;padding-right:18px}
+  }
+  /* touch devices: keyboard hints are meaningless, drop hover transforms */
+  @media (pointer:coarse){
+    .pl-foot{display:none}
+    .card:hover{transform:none}
+    .btn-primary:hover,.btn-ghost:hover{transform:none}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001s !important;transition-duration:.05s !important}
+    h1 .line span{transform:none}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<div class="progress-wrap">
+  <div class="meter pre-meter">
+    <span class="meter-label"><span class="dot"></span>Warm-Up</span>
+    <div class="bar"><i id="preFill"></i></div>
+    <div class="progress-count"><b id="preCount">0</b>/<span id="preTotal">0</span></div>
+  </div>
+  <div class="meter-div"></div>
+  <div class="meter post-meter">
+    <span class="meter-label"><span class="dot"></span>Cooldown</span>
+    <div class="bar"><i id="postFill"></i></div>
+    <div class="progress-count"><b id="postCount">0</b>/<span id="postTotal">0</span></div>
+  </div>
+  <button class="mini-reset" id="miniReset" title="Reset progress" aria-label="Reset progress">
+    <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/></svg>
+  </button>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="kicker">Mamba Mentality · Mobility Protocol</div>
+    <h1>
+      <span class="line"><span>The <span class="gold">Stretch</span></span></span>
+      <span class="line"><span class="outline">Routine</span></span>
+    </h1>
+    <p class="sub">A Kobe-inspired flow: a <b>dynamic warm-up</b> that builds from gentle to explosive, and a <b>static cooldown</b> for recovery. Lower-body weighted, just like his. Tap each move to check it off — or run the guided session and go hands-free.</p>
+    <div class="cta-row">
+      <button class="btn-primary" id="startPre">
+        <svg viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></svg>
+        Guided Warm-Up
+      </button>
+      <button class="btn-primary post" id="startPost">
+        <svg viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></svg>
+        Guided Cooldown
+      </button>
+      <button class="btn-ghost" id="resetBtn">
+        <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/></svg>
+        Reset progress
+      </button>
+    </div>
+  </header>
+
+  <!-- PRE -->
+  <section id="pre" class="pre">
+    <div class="sec-head reveal">
+      <span class="sec-num">01</span>
+      <h2>Pre — <span class="accent">Dynamic</span></h2>
+    </div>
+    <div class="sec-meta reveal">
+      <span class="tag dyn">Warm-Up</span>
+      <span>⏱ <b>10–12 min</b></span>
+      <span>🎯 <b>Gentle → Explosive</b></span>
+      <span>🦵 <b>~80% lower body</b></span>
+    </div>
+    <div id="preList"></div>
+    <div class="tip reveal">
+      <h3>Mamba Note</h3>
+      <p>Keep these moving — <b>no deep static holds before training</b>, since they can briefly cut your power output. Kobe gradually shifted from gentle prep to a broader, more active range as game time approached.</p>
+    </div>
+  </section>
+
+  <!-- POST -->
+  <section id="post" class="post">
+    <div class="sec-head reveal">
+      <span class="sec-num">02</span>
+      <h2>Post — <span class="accent">Static</span></h2>
+    </div>
+    <div class="sec-meta reveal">
+      <span class="tag stat">Cooldown</span>
+      <span>⏱ <b>10–12 min</b></span>
+      <span>🎯 <b>Hold 30s / side</b></span>
+      <span>🌬 <b>Slow breathing, no bouncing</b></span>
+    </div>
+    <div id="postList"></div>
+    <div class="tip reveal">
+      <h3>Recovery Boost</h3>
+      <p>Got a <b>foam roller or massage gun</b>? Spend 3–5 min on calves, quads, and IT band first — Kobe used percussion tools to "wake the muscles up" and make deep stretching more effective.</p>
+    </div>
+  </section>
+
+  <div class="quote reveal">
+    <blockquote>"Stretch. <em>You better stretch.</em>"</blockquote>
+    <cite>— The Black Mamba</cite>
+  </div>
+
+  <footer>
+    Built around Kobe Bryant's documented mobility principles.<br>
+    General guidance — not medical advice. Ease off anything that causes sharp pain.
+  </footer>
+</div>
+
+<!-- GUIDED SESSION PLAYER -->
+<div class="player" id="player" aria-hidden="true">
+  <div class="pl-top">
+    <span class="pl-pill" id="plPill">Warm-Up</span>
+    <span class="pl-counter"><b id="plStep">1</b> / <span id="plTotal">0</span></span>
+    <button class="pl-close" id="plClose" aria-label="Close session">
+      <svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="pl-track" id="plTrack"></div>
+
+  <div class="pl-stage">
+    <div class="pl-side" id="plSide"></div>
+    <div class="pl-name" id="plName">—</div>
+    <div class="pl-dose" id="plDose"></div>
+    <div class="pl-note" id="plNote"></div>
+    <div class="ring-wrap" id="ringWrap">
+      <svg class="ring" viewBox="0 0 100 100">
+        <circle class="bg" cx="50" cy="50" r="44"></circle>
+        <circle class="fg" id="ringFg" cx="50" cy="50" r="44"></circle>
+      </svg>
+      <div class="ring-center">
+        <div class="ring-time" id="ringTime">0:30</div>
+        <div class="ring-sub" id="ringSub">Tap play</div>
+      </div>
+      <div class="pl-ready" id="plReady">
+        <div class="lbl">Get ready</div>
+        <div class="num" id="readyNum">3</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pl-controls">
+    <button class="pl-btn side" id="plPrev" aria-label="Previous">
+      <svg viewBox="0 0 24 24"><polyline points="15 5 8 12 15 19"/></svg>
+    </button>
+    <button class="pl-btn main" id="plPlay" aria-label="Play / pause">
+      <svg id="plPlayIcon" viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></svg>
+    </button>
+    <button class="pl-btn side" id="plNext" aria-label="Next">
+      <svg viewBox="0 0 24 24"><polyline points="9 5 16 12 9 19"/></svg>
+    </button>
+  </div>
+  <div class="pl-foot"><kbd>Space</kbd> play/pause &nbsp; <kbd>←</kbd> <kbd>→</kbd> skip &nbsp; <kbd>Esc</kbd> exit</div>
+
+  <div class="pl-complete">
+    <div class="big">Job's <em>Finished.</em></div>
+    <p>Full Mamba flow complete — warm-up and cooldown done. Recovery is where the work pays off.</p>
+    <button class="btn-primary" id="plDone">Back to routine</button>
+  </div>
+</div>
+
+<div class="celebrate" id="celebrate">🐍 Routine complete — Mamba out.</div>
+
+<script>
+/* ======================================================
+   MAMBA STRETCH ROUTINE — logic
+   data → render → persistence → guided player → cues
+   ====================================================== */
+
+/* Each move: name, dose (display), note, why (italic reason),
+   dur (seconds per side in guided mode), sides (1 or 2) */
+const pre = [
+  { name:"Raise the Temperature", dose:"2–3 min", note:"Light jog, jump rope, or jumping jacks until you break a light sweat.", why:"", dur:120, sides:1 },
+  { name:"Ankle Circles", dose:"10 ea way / foot", note:"Keep ankles limber — ", why:"stiffness here refers pain up to the knees, hips and back.", dur:30, sides:2 },
+  { name:"Hip Circles", dose:"10 ea way", note:"Standing, hands on hips, big controlled rotations.", why:"", dur:30, sides:1 },
+  { name:"Leg Swings", dose:"8–10 / side", note:"Front-to-back, then side-to-side. Hold something for balance.", why:"", dur:30, sides:2 },
+  { name:"Walking Lunges w/ Twist", dose:"8–10 / side", note:"Rotate your torso over the front leg. ", why:"A Kobe favorite.", dur:40, sides:2 },
+  { name:"High Kicks (Toy Soldiers)", dose:"8–10 / side", note:"Straight-leg kick up to the opposite hand.", why:"", dur:30, sides:2 },
+  { name:"Bodyweight Squats", dose:"10 reps", note:"Slow tempo, sinking a little deeper each rep.", why:"", dur:40, sides:1 },
+  { name:"Arm Circles & Swings", dose:"~20 sec", note:"Small upper-body share — forward, back, then crossover swings.", why:"", dur:25, sides:1 },
+  { name:"Band Monster Walks", dose:"10 steps / way", note:"Band above knees. Lateral steps, tension held throughout.", why:"", dur:30, sides:2 },
+  { name:"Glute Bridges", dose:"12–15 reps", note:"Squeeze at the top — final hip & glute activation before you lift or play.", why:"", dur:40, sides:1 },
+];
+const post = [
+  { name:"Calves", dose:"30s / side", note:"Wall or step stretch, heel pressing down.", why:"", dur:30, sides:2 },
+  { name:"Hamstrings", dose:"30s / side", note:"Seated or standing forward fold, soft knees.", why:"", dur:30, sides:2 },
+  { name:"Quads", dose:"30s / side", note:"Standing, foot to glute, knees together.", why:"", dur:30, sides:2 },
+  { name:"Hip Flexors", dose:"30s / side", note:"Half-kneeling lunge — essential if you sit a lot.", why:"", dur:30, sides:2 },
+  { name:"Glutes / Piriformis", dose:"30s / side", note:"Figure-four, lying on your back or seated.", why:"", dur:30, sides:2 },
+  { name:"Ankles", dose:"30s / side", note:"Kneeling ankle rock, easing weight gently forward.", why:"", dur:30, sides:2 },
+  { name:"Shoulders & Chest", dose:"30s / side", note:"Cross-body arm pull, then a doorway chest stretch.", why:"", dur:30, sides:2 },
+];
+
+// stable id per move for persistence
+pre.forEach((d,i)=> d.id = "pre-"+i);
+post.forEach((d,i)=> d.id = "post-"+i);
+const all = [...pre, ...post];
+const total = all.length;
+
+/* ---------- persistence ---------- */
+const STORE_KEY = "mamba.routine.v1";
+function loadState(){
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    const data = raw ? JSON.parse(raw) : {};
+    // reset if it's a new calendar day
+    const today = new Date().toDateString();
+    if (data.day !== today) return { day: today, done: {} };
+    return { day: data.day, done: data.done || {} };
+  } catch(e){ return { day: new Date().toDateString(), done: {} }; }
+}
+let state = loadState();
+function saveState(){
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch(e){}
+}
+function isDone(id){ return !!state.done[id]; }
+function setDone(id, val){
+  if (val) state.done[id] = true; else delete state.done[id];
+  saveState();
+}
+
+/* ---------- audio + haptic cues ---------- */
+let actx = null;
+function beep(freq=880, dur=0.16, type="sine", vol=0.18){
+  try {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === "suspended") actx.resume();
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = type; o.frequency.value = freq;
+    o.connect(g); g.connect(actx.destination);
+    const t = actx.currentTime;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.start(t); o.stop(t + dur + 0.02);
+  } catch(e){}
+}
+function tick(){ beep(660, 0.05, "sine", 0.07); }
+function chimeDone(){            // distinct two-tone when a hold/interval completes
+  beep(784, 0.14, "triangle", 0.2);
+  setTimeout(()=> beep(1175, 0.22, "triangle", 0.2), 130);
+  if (navigator.vibrate) navigator.vibrate([60, 40, 90]);
+}
+function buzzSwitch(){           // softer cue when switching sides
+  beep(523, 0.12, "sine", 0.16);
+  if (navigator.vibrate) navigator.vibrate(50);
+}
+
+/* ---------- render checklist cards ---------- */
+const checkSVG = '<svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>';
+
+function makeCard(d, idx, isPost){
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.id = d.id;
+  const noteHTML = d.why ? d.note + '<span class="why">'+d.why+'</span>' : d.note;
+  card.innerHTML = `
+    <div class="check" role="checkbox" tabindex="0" aria-checked="${isDone(d.id)}" aria-label="Mark ${d.name} done">${checkSVG}</div>
+    <div class="ex-body">
+      <div class="ex-top">
+        <div class="ex-name">${d.name}</div>
+        <div class="ex-dose">${d.dose}</div>
+      </div>
+      <div class="ex-note">${noteHTML}</div>
+      ${isPost ? '<button class="timer-btn"><span class="ic">▶</span> <span class="t">0:30</span> hold</button>' : ''}
+    </div>`;
+
+  if (isDone(d.id)) card.classList.add('done');
+
+  const checkEl = card.querySelector('.check');
+  const toggle = ()=>{
+    const nowDone = !card.classList.contains('done');
+    card.classList.toggle('done', nowDone);
+    checkEl.setAttribute('aria-checked', nowDone);
+    setDone(d.id, nowDone);
+    recount();
+  };
+  checkEl.addEventListener('click', toggle);
+  checkEl.addEventListener('keydown', e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); toggle(); }});
+  card.querySelector('.ex-name').addEventListener('click', toggle);
+
+  if (isPost){
+    const btn = card.querySelector('.timer-btn');
+    const tEl = btn.querySelector('.t');
+    const icEl = btn.querySelector('.ic');
+    let sec = 30, id = null, resetT = null;
+    const fmt = s => '0:'+String(s).padStart(2,'0');
+    btn.addEventListener('click', e=>{
+      e.stopPropagation();
+      if (id){ clearInterval(id); id=null; btn.classList.remove('running'); icEl.textContent='▶'; sec=30; tEl.textContent=fmt(sec); return; }
+      clearTimeout(resetT); sec=30;          // cancel any pending '✓' reset so re-click can't tick negative
+      btn.classList.add('running'); icEl.textContent='■';
+      id = setInterval(()=>{
+        sec--; tEl.textContent = sec>0 ? fmt(sec) : tEl.textContent;
+        if (sec<=3 && sec>0) tick();
+        if (sec<=0){
+          clearInterval(id); id=null; btn.classList.remove('running'); icEl.textContent='▶';
+          tEl.textContent='✓'; chimeDone();
+          if (!card.classList.contains('done')){ card.classList.add('done'); setDone(d.id,true); recount(); }
+          resetT = setTimeout(()=>{ sec=30; tEl.textContent=fmt(sec); }, 1500);
+        }
+      }, 1000);
+    });
+  }
+  return card;
+}
+
+const preList = document.getElementById('preList');
+pre.forEach((d,i)=> preList.appendChild(makeCard(d,i,false)));
+const postList = document.getElementById('postList');
+post.forEach((d,i)=> postList.appendChild(makeCard(d,i,true)));
+
+document.getElementById('preTotal').textContent = pre.length;
+document.getElementById('postTotal').textContent = post.length;
+
+let celebrated = false;
+function recount(){
+  const preDone = preList.querySelectorAll('.card.done').length;
+  const postDone = postList.querySelectorAll('.card.done').length;
+  const done = preDone + postDone;
+  document.getElementById('preCount').textContent = preDone;
+  document.getElementById('postCount').textContent = postDone;
+  document.getElementById('preFill').style.width = (preDone/pre.length*100)+'%';
+  document.getElementById('postFill').style.width = (postDone/post.length*100)+'%';
+  if (done === total && !celebrated){ celebrated = true; celebrate(); }
+  if (done < total) celebrated = false;
+}
+recount();
+
+/* ---------- celebration toast ---------- */
+const celebrateEl = document.getElementById('celebrate');
+function celebrate(){
+  celebrateEl.classList.add('show');
+  beep(659,0.12,"triangle",0.2); setTimeout(()=>beep(880,0.12,"triangle",0.2),120); setTimeout(()=>beep(1175,0.26,"triangle",0.22),260);
+  if (navigator.vibrate) navigator.vibrate([80,50,80,50,140]);
+  setTimeout(()=> celebrateEl.classList.remove('show'), 3200);
+}
+
+/* ---------- reset ---------- */
+function resetAll(){
+  state.done = {}; saveState();
+  document.querySelectorAll('.card.done').forEach(c=>{
+    c.classList.remove('done');
+    const chk = c.querySelector('.check'); if (chk) chk.setAttribute('aria-checked','false');
+  });
+  celebrated = false;
+  recount();
+}
+document.getElementById('resetBtn').addEventListener('click', resetAll);
+document.getElementById('miniReset').addEventListener('click', resetAll);
+
+/* ---------- reveal on scroll ---------- */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold:.15 });
+document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+
+/* ======================================================
+   GUIDED SESSION PLAYER
+   ====================================================== */
+const player   = document.getElementById('player');
+const plPill   = document.getElementById('plPill');
+const plStep   = document.getElementById('plStep');
+const plTotal  = document.getElementById('plTotal');
+const plTrack  = document.getElementById('plTrack');
+const plSide   = document.getElementById('plSide');
+const plName   = document.getElementById('plName');
+const plDose   = document.getElementById('plDose');
+const plNote   = document.getElementById('plNote');
+const ringFg   = document.getElementById('ringFg');
+const ringTime = document.getElementById('ringTime');
+const ringSub  = document.getElementById('ringSub');
+const ringWrap = document.getElementById('ringWrap');
+const plReady  = document.getElementById('plReady');
+const readyNum = document.getElementById('readyNum');
+const plPlayIcon = document.getElementById('plPlayIcon');
+
+const RING_LEN = 2 * Math.PI * 44;
+ringFg.style.strokeDasharray = RING_LEN;
+ringFg.setAttribute('stroke-dashoffset', RING_LEN);
+
+const playIco = '<path d="M7 5v14l12-7z"/>';
+const pauseIco = '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>';
+
+// session bounds (slice of `all`): pre = [0, pre.length); post = [pre.length, total)
+let sStart = 0, sEnd = total, sMode = 'pre';
+let lastFocused = null;   // element to restore focus to when the player closes
+
+function buildTrack(){
+  plTrack.innerHTML = '';
+  for (let i = sStart; i < sEnd; i++){
+    const seg = document.createElement('div');
+    seg.className = 'pl-seg' + (i >= pre.length ? ' post' : '');
+    seg.innerHTML = '<i></i>';
+    plTrack.appendChild(seg);
+  }
+  plTotal.textContent = sEnd - sStart;
+}
+
+let cur = 0;           // index into `all`
+let curSide = 0;       // 0 or 1
+let remaining = 0;     // seconds left in this phase
+let running = false;
+let ticker = null;
+
+function fmt(s){ return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
+
+function setRing(frac){ ringFg.setAttribute('stroke-dashoffset', RING_LEN * (1 - frac)); }
+
+function paintSegments(){
+  [...plTrack.children].forEach((seg,i)=>{
+    const idx = sStart + i;
+    seg.classList.toggle('done', idx < cur);
+    seg.querySelector('i').style.width = idx < cur ? '100%' : '0%';
+  });
+}
+
+function loadPhase(animateIn){
+  const d = all[cur];
+  const isPost = cur >= pre.length;
+  player.classList.toggle('stat-mode', isPost);
+  plPill.className = 'pl-pill ' + (isPost ? 'stat' : 'dyn');
+  plPill.textContent = isPost ? 'Cooldown' : 'Warm-Up';
+  plStep.textContent = cur - sStart + 1;
+
+  if (animateIn){ plName.style.opacity = 0; setTimeout(()=>{ plName.style.opacity = 1; }, 180); }
+  plName.textContent = d.name;
+  plDose.textContent = d.dose;
+  plNote.innerHTML = d.why ? d.note + d.why : d.note;
+  plSide.textContent = d.sides === 2 ? (curSide === 0 ? 'Left side' : 'Right side') : '';
+
+  remaining = d.dur;
+  ringTime.textContent = fmt(remaining);
+  ringSub.textContent = d.sides === 2 ? (curSide===0?'1st side · '+d.dur+'s':'2nd side · '+d.dur+'s') : d.dur + 's';
+  setRing(0);
+  paintSegments();
+}
+
+function startTicker(){
+  const d = all[cur];
+  clearInterval(ticker);
+  ringSub.textContent = 'Go';
+  ticker = setInterval(()=>{
+    remaining--;
+    ringTime.textContent = fmt(Math.max(remaining,0));
+    setRing(1 - remaining / d.dur);
+    if (remaining <= 3 && remaining > 0) tick();
+    if (remaining <= 0){
+      clearInterval(ticker);
+      ringWrap.classList.add('pulse'); setTimeout(()=>ringWrap.classList.remove('pulse'),420);
+      phaseComplete();
+    }
+  }, 1000);
+}
+
+function phaseComplete(){
+  const d = all[cur];
+  if (d.sides === 2 && curSide === 0){
+    // switch sides
+    buzzSwitch();
+    curSide = 1;
+    loadPhase(false);
+    if (running) afterReady(()=> startTicker());
+  } else {
+    chimeDone();
+    // mark the move done on the checklist
+    markMoveDone(d.id);
+    advance();
+  }
+}
+
+function markMoveDone(id){
+  const card = document.querySelector('.card[data-id="'+id+'"]');
+  if (card && !card.classList.contains('done')){
+    card.classList.add('done');
+    const chk = card.querySelector('.check'); if (chk) chk.setAttribute('aria-checked','true');
+    setDone(id, true); recount();
+  }
+}
+
+function advance(){
+  if (cur >= sEnd - 1){ finishSession(); return; }
+  cur++; curSide = 0;
+  loadPhase(true);
+  if (running) afterReady(()=> startTicker());
+}
+
+function back(){
+  clearInterval(ticker);
+  if (curSide === 1){ curSide = 0; }
+  else if (cur > sStart){ cur--; curSide = 0; }
+  loadPhase(true);
+  if (running) afterReady(()=> startTicker());
+}
+
+// 3-2-1 get-ready countdown between phases when auto-running
+let readyTimer = null;
+function afterReady(cb){
+  clearInterval(readyTimer);
+  let n = 3;
+  plReady.classList.add('show');
+  readyNum.textContent = n; beep(523,0.1,"sine",0.12);
+  readyTimer = setInterval(()=>{
+    n--;
+    if (n <= 0){
+      clearInterval(readyTimer);
+      plReady.classList.remove('show');
+      beep(784,0.14,"sine",0.16);
+      cb();
+    } else {
+      readyNum.textContent = n; beep(523,0.1,"sine",0.12);
+    }
+  }, 800);
+}
+
+/* ---------- screen wake lock (keep screen on during a session) ---------- */
+let wakeLock = null;
+async function requestWake(){
+  try { if ('wakeLock' in navigator){ wakeLock = await navigator.wakeLock.request('screen'); } } catch(e){}
+}
+async function releaseWake(){
+  try { if (wakeLock){ await wakeLock.release(); wakeLock = null; } } catch(e){}
+}
+// re-acquire if the user tabs away and back while the player is open
+document.addEventListener('visibilitychange', ()=>{
+  if (document.visibilityState === 'visible' && player.classList.contains('open') && running) requestWake();
+});
+
+function setPlaying(on){
+  running = on;
+  plPlayIcon.innerHTML = on ? pauseIco : playIco;
+  if (on){
+    if (actx && actx.state === 'suspended') actx.resume();
+    requestWake();
+    ringSub.textContent = 'Go';
+    startTicker();
+  } else {
+    clearInterval(ticker); clearInterval(readyTimer);
+    plReady.classList.remove('show');
+    releaseWake();
+    ringSub.textContent = 'Paused';
+  }
+}
+
+function openPlayer(mode){
+  sMode = mode;
+  if (mode === 'post'){ sStart = pre.length; sEnd = total; }
+  else { sStart = 0; sEnd = pre.length; }
+  cur = sStart; curSide = 0; running = false;
+  buildTrack();
+  player.classList.remove('complete');
+  player.classList.add('open');
+  player.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+  loadPhase(false);
+  ringSub.textContent = 'Tap play';
+  plPlayIcon.innerHTML = playIco;
+  // warm up audio on user gesture
+  try { if (!actx) actx = new (window.AudioContext||window.webkitAudioContext)(); actx.resume(); } catch(e){}
+  // move focus into the modal, remember where it came from
+  lastFocused = document.activeElement;
+  document.getElementById('plPlay').focus();
+}
+
+function closePlayer(){
+  setPlaying(false);
+  clearInterval(ticker); clearInterval(readyTimer);
+  player.classList.remove('open');
+  player.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+  if (lastFocused && lastFocused.focus){ lastFocused.focus(); lastFocused = null; }
+}
+
+function finishSession(){
+  clearInterval(ticker); clearInterval(readyTimer);
+  running = false;
+  cur = sEnd; // so all segments paint as done
+  releaseWake();
+  paintSegments();
+  const big = player.querySelector('.pl-complete .big');
+  const msg = player.querySelector('.pl-complete p');
+  if (sMode === 'post'){
+    big.innerHTML = 'Job\u2019s <em>Finished.</em>';
+    msg.textContent = 'Cooldown complete. Slow breathing did the work — recovery is where the gains lock in.';
+  } else {
+    big.innerHTML = 'Warm. <em>Loaded.</em>';
+    msg.textContent = 'Warm-up done — body\u2019s primed and explosive. Go attack the session, then hit the cooldown when you\u2019re back.';
+  }
+  player.classList.add('complete');
+  beep(659,0.12,"triangle",0.2); setTimeout(()=>beep(880,0.12,"triangle",0.2),120); setTimeout(()=>beep(1175,0.3,"triangle",0.22),260);
+  if (navigator.vibrate) navigator.vibrate([90,50,90,50,160]);
+}
+
+/* player controls */
+document.getElementById('startPre').addEventListener('click', ()=> openPlayer('pre'));
+document.getElementById('startPost').addEventListener('click', ()=> openPlayer('post'));
+document.getElementById('plClose').addEventListener('click', closePlayer);
+document.getElementById('plDone').addEventListener('click', closePlayer);
+document.getElementById('plPlay').addEventListener('click', ()=> setPlaying(!running));
+document.getElementById('plNext').addEventListener('click', ()=>{
+  clearInterval(ticker); clearInterval(readyTimer); plReady.classList.remove('show');
+  const d = all[cur];
+  if (d.sides === 2 && curSide === 0){ curSide = 1; loadPhase(false); if(running) afterReady(()=> startTicker()); }
+  else advance();
+});
+document.getElementById('plPrev').addEventListener('click', back);
+
+/* keyboard */
+document.addEventListener('keydown', e=>{
+  if (!player.classList.contains('open')) return;
+  if (e.key === 'Escape'){ closePlayer(); }
+  else if (e.key === ' '){ e.preventDefault(); if(!player.classList.contains('complete')) setPlaying(!running); }
+  else if (e.key === 'ArrowRight'){ document.getElementById('plNext').click(); }
+  else if (e.key === 'ArrowLeft'){ back(); }
+  else if (e.key === 'Tab'){
+    // trap focus inside the modal — only visible buttons participate
+    const vis = [...player.querySelectorAll('button')].filter(el=> el.offsetParent !== null);
+    if (!vis.length) return;
+    const first = vis[0], last = vis[vis.length-1];
+    if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+});
+</script>
+</body>
+</html>
