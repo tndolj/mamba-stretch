@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="78%" cy="6%" r="120%">
+      <stop offset="0%" stop-color="#1b1a16"/>
+      <stop offset="55%" stop-color="#0a0a0b"/>
+      <stop offset="100%" stop-color="#070708"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f9d27a"/>
+      <stop offset="55%" stop-color="#f3b425"/>
+      <stop offset="100%" stop-color="#d9930a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- tile -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+
+  <!-- centered + scaled into maskable safe zone -->
+  <g transform="translate(256 256) scale(0.88) translate(-245 -231)">
+    <!-- mamba: serpentine S, uniform round stroke, head at top -->
+    <g fill="none" stroke="url(#gold)" stroke-width="46" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 170 392 C 170 312, 352 330, 352 256 C 352 182, 170 200, 170 120"/>
+    </g>
+    <!-- head wedge + eye -->
+    <path d="M 170 120 L 138 70 L 206 78 Z" fill="url(#gold)"/>
+    <circle cx="170" cy="116" r="9" fill="#0a0a0b"/>
+  </g>
+</svg>

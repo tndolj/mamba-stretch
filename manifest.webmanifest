@@ -1,0 +1,17 @@
+{
+  "name": "Mamba Stretch Routine",
+  "short_name": "Mamba Stretch",
+  "description": "Kobe-inspired mobility flow: dynamic warm-up and static cooldown with a hands-free guided session player.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0b",
+  "theme_color": "#0a0a0b",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
