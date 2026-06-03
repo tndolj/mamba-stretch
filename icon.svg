@@ -7,22 +7,34 @@
     </radialGradient>
     <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#f9d27a"/>
-      <stop offset="55%" stop-color="#f3b425"/>
+      <stop offset="50%" stop-color="#f3b425"/>
       <stop offset="100%" stop-color="#d9930a"/>
     </linearGradient>
   </defs>
 
-  <!-- tile -->
   <rect width="512" height="512" rx="112" fill="url(#bg)"/>
 
-  <!-- centered + scaled into maskable safe zone -->
-  <g transform="translate(256 256) scale(0.88) translate(-245 -231)">
-    <!-- mamba: serpentine S, uniform round stroke, head at top -->
-    <g fill="none" stroke="url(#gold)" stroke-width="46" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M 170 392 C 170 312, 352 330, 352 256 C 352 182, 170 200, 170 120"/>
+  <g transform="translate(256 256) scale(0.84) translate(-252 -250)">
+
+    <!-- forked tongue (behind head, flicking from snout) -->
+    <g stroke="#e23b2e" stroke-width="6" stroke-linecap="round" fill="none">
+      <path d="M 188 100 C 182 78, 176 66, 170 52"/>
+      <path d="M 170 52 L 158 38"/>
+      <path d="M 170 52 L 180 36"/>
     </g>
-    <!-- head wedge + eye -->
-    <path d="M 170 120 L 138 70 L 206 78 Z" fill="url(#gold)"/>
-    <circle cx="170" cy="116" r="9" fill="#0a0a0b"/>
+
+    <!-- HEAD: sleek arrow snake head, raised -->
+    <path d="M 201 206
+             C 178 196, 168 168, 172 140
+             C 175 116, 182 100, 192 96
+             C 204 92, 214 110, 217 134
+             C 220 160, 218 192, 210 204
+             Z" fill="url(#gold)"/>
+
+    <!-- BODY: smooth tapered S, neck -> fine tail (generated outline) -->
+    <path fill="url(#gold)" d="M 200.4 209.7 L 216.7 211.6 L 231.6 213.8 L 245.3 216.4 L 257.7 219.2 L 269.0 222.3 L 279.0 225.6 L 287.8 229.1 L 295.5 232.6 L 302.2 236.2 L 307.8 239.9 L 312.4 243.5 L 316.2 247.1 L 319.2 250.6 L 321.6 254.2 L 323.4 257.9 L 324.7 261.8 L 325.5 266.1 L 325.6 270.7 L 325.1 275.7 L 323.8 281.0 L 321.8 286.7 L 319.2 292.3 L 315.7 297.8 L 311.7 303.1 L 307.1 308.4 L 301.9 313.4 L 296.2 318.4 L 289.9 323.2 L 283.2 327.9 L 276.0 332.6 L 268.4 337.1 L 260.5 341.6 L 252.2 346.0 L 243.6 350.4 L 234.8 354.9 L 225.7 359.3 L 216.5 363.9 L 207.0 368.5 L 197.5 373.3 L 187.8 378.2 L 178.1 383.3 L 168.4 388.6 L 158.6 394.1 L 148.7 399.8 L 151.3 404.2 L 161.1 398.8 L 171.0 393.8 L 181.0 389.1 L 190.9 384.7 L 200.8 380.5 L 210.6 376.5 L 220.3 372.7 L 229.9 369.0 L 239.4 365.4 L 248.7 361.8 L 257.8 358.2 L 266.7 354.7 L 275.4 351.0 L 283.9 347.3 L 292.1 343.4 L 300.0 339.3 L 307.7 335.0 L 315.0 330.4 L 322.1 325.4 L 328.7 320.0 L 335.0 314.1 L 340.8 307.7 L 346.2 300.2 L 350.7 292.6 L 354.3 284.8 L 357.1 276.6 L 358.9 268.1 L 359.5 259.3 L 359.0 250.3 L 357.2 241.3 L 354.0 232.5 L 349.7 223.8 L 344.1 215.5 L 337.4 207.6 L 329.5 200.0 L 320.6 192.9 L 310.6 186.2 L 299.6 179.9 L 287.4 174.0 L 274.2 168.5 L 259.8 163.3 L 244.2 158.6 L 227.5 154.3 L 209.6 150.3 Z"/>
+
+    <!-- eye -->
+    <ellipse cx="195" cy="148" rx="8" ry="12" transform="rotate(20 195 148)" fill="#0a0a0b"/>
   </g>
 </svg>
