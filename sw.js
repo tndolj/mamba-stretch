@@ -1,6 +1,6 @@
 /* Mamba Stretch — service worker
    precache app shell, offline-first navigations, runtime-cache assets + fonts */
-const CACHE = 'mamba-v6';
+const CACHE = 'mamba-v8';
 const SHELL = [
   '/',
   '/index.html',

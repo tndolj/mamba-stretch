@@ -123,9 +123,9 @@
   }
   .meter{display:flex;align-items:center;gap:11px;flex:1;min-width:0}
   .meter-label{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap;display:inline-flex;align-items:center;gap:7px}
-  .meter-label .dot{width:7px;height:7px;border-radius:50%}
-  .pre-meter .meter-label .dot{background:var(--pre)}
-  .post-meter .meter-label .dot{background:var(--post)}
+  .meter .dot{width:7px;height:7px;border-radius:50%;flex:none}
+  .pre-meter .dot{background:var(--pre)}
+  .post-meter .dot{background:var(--post)}
   .meter-div{width:1px;align-self:stretch;background:var(--line)}
   .bar{flex:1;height:7px;background:var(--panel-2);border-radius:100px;overflow:hidden}
   .bar i{display:block;height:100%;width:0;border-radius:100px;transition:width .5s cubic-bezier(.22,1,.36,1)}
@@ -140,6 +140,8 @@
   }
   .mini-reset:hover{color:var(--paper);background:var(--panel-2)}
   .mini-reset svg{width:16px;height:16px;stroke:currentColor;stroke-width:2.2;fill:none}
+  .mini-reset.armed{color:var(--gold);background:rgba(243,180,37,.14)}
+  .btn-ghost.armed{color:var(--gold);border-color:var(--gold)}
 
   /* ---------- SECTION ---------- */
   section{margin-top:56px;scroll-margin-top:72px}
@@ -188,7 +190,7 @@
   .ex-dose{font-family:'Anton',sans-serif;font-size:.92rem;letter-spacing:.03em;color:var(--gold);white-space:nowrap}
   .post .ex-dose{color:var(--post-soft)}
   .ex-note{color:var(--muted);font-size:.92rem;margin-top:5px}
-  .ex-note .why{color:var(--gold-soft);font-style:italic}
+  .ex-note .why,.pl-note .why{color:var(--gold-soft);font-style:italic}
 
   .timer-btn{
     margin-top:12px;font-family:'Archivo';font-weight:700;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
@@ -374,13 +376,13 @@
 
 <div class="progress-wrap">
   <div class="meter pre-meter">
-    <span class="meter-label"><span class="dot"></span>Warm-Up</span>
+    <span class="dot"></span><span class="meter-label">Warm-Up</span>
     <div class="bar"><i id="preFill"></i></div>
     <div class="progress-count"><b id="preCount">0</b>/<span id="preTotal">0</span></div>
   </div>
   <div class="meter-div"></div>
   <div class="meter post-meter">
-    <span class="meter-label"><span class="dot"></span>Cooldown</span>
+    <span class="dot"></span><span class="meter-label">Cooldown</span>
     <div class="bar"><i id="postFill"></i></div>
     <div class="progress-count"><b id="postCount">0</b>/<span id="postTotal">0</span></div>
   </div>
@@ -408,7 +410,7 @@
       </button>
       <button class="btn-ghost" id="resetBtn">
         <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/></svg>
-        Reset progress
+        <span class="reset-label">Reset progress</span>
       </button>
     </div>
   </header>
@@ -538,7 +540,7 @@ const pre = [
 ];
 const post = [
   { name:"Calves", dose:"30s / side", note:"Wall or step stretch, heel pressing down.", why:"", dur:30, sides:2 },
-  { name:"Hamstrings", dose:"30s / side", note:"Seated or standing forward fold, soft knees.", why:"", dur:30, sides:2 },
+  { name:"Hamstrings", dose:"30s", note:"Seated or standing forward fold, soft knees — both legs together.", why:"", dur:30, sides:1 },
   { name:"Quads", dose:"30s / side", note:"Standing, foot to glute, knees together.", why:"", dur:30, sides:2 },
   { name:"Hip Flexors", dose:"30s / side", note:"Half-kneeling lunge — essential if you sit a lot.", why:"", dur:30, sides:2 },
   { name:"Glutes / Piriformis", dose:"30s / side", note:"Figure-four, lying on your back or seated.", why:"", dur:30, sides:2 },
@@ -617,7 +619,7 @@ function makeCard(d, idx, isPost){
         <div class="ex-dose">${d.dose}</div>
       </div>
       <div class="ex-note">${noteHTML}</div>
-      ${isPost ? '<button class="timer-btn"><span class="ic">▶</span> <span class="t">0:30</span> hold</button>' : ''}
+      ${isPost ? '<button class="timer-btn"><span class="ic">▶</span> <span class="t">'+fmt(d.dur)+'</span> hold</button>' : ''}
     </div>`;
 
   if (isDone(d.id)) card.classList.add('done');
@@ -638,12 +640,11 @@ function makeCard(d, idx, isPost){
     const btn = card.querySelector('.timer-btn');
     const tEl = btn.querySelector('.t');
     const icEl = btn.querySelector('.ic');
-    let sec = 30, id = null, resetT = null;
-    const fmt = s => '0:'+String(s).padStart(2,'0');
+    let sec = d.dur, id = null, resetT = null;
     btn.addEventListener('click', e=>{
       e.stopPropagation();
-      if (id){ clearInterval(id); id=null; btn.classList.remove('running'); icEl.textContent='▶'; sec=30; tEl.textContent=fmt(sec); return; }
-      clearTimeout(resetT); sec=30;          // cancel any pending '✓' reset so re-click can't tick negative
+      if (id){ clearInterval(id); id=null; btn.classList.remove('running'); icEl.textContent='▶'; sec=d.dur; tEl.textContent=fmt(sec); return; }
+      clearTimeout(resetT); sec=d.dur;          // cancel any pending '✓' reset so re-click can't tick negative
       btn.classList.add('running'); icEl.textContent='■';
       id = setInterval(()=>{
         sec--; tEl.textContent = sec>0 ? fmt(sec) : tEl.textContent;
@@ -651,8 +652,8 @@ function makeCard(d, idx, isPost){
         if (sec<=0){
           clearInterval(id); id=null; btn.classList.remove('running'); icEl.textContent='▶';
           tEl.textContent='✓'; chimeDone();
-          if (!card.classList.contains('done')){ card.classList.add('done'); setDone(d.id,true); recount(); }
-          resetT = setTimeout(()=>{ sec=30; tEl.textContent=fmt(sec); }, 1500);
+          if (!card.classList.contains('done')){ card.classList.add('done'); checkEl.setAttribute('aria-checked','true'); setDone(d.id,true); recount(); }
+          resetT = setTimeout(()=>{ sec=d.dur; tEl.textContent=fmt(sec); }, 1500);
         }
       }, 1000);
     });
@@ -691,18 +692,49 @@ function celebrate(){
   setTimeout(()=> celebrateEl.classList.remove('show'), 3200);
 }
 
-/* ---------- reset ---------- */
-function resetAll(){
-  state.done = {}; saveState();
+/* ---------- reset (two-tap to confirm) ---------- */
+function clearDoneCards(){
   document.querySelectorAll('.card.done').forEach(c=>{
     c.classList.remove('done');
     const chk = c.querySelector('.check'); if (chk) chk.setAttribute('aria-checked','false');
   });
+}
+function resetAll(){
+  state.done = {}; saveState();
+  clearDoneCards();
   celebrated = false;
   recount();
 }
-document.getElementById('resetBtn').addEventListener('click', resetAll);
-document.getElementById('miniReset').addEventListener('click', resetAll);
+const resetBtn = document.getElementById('resetBtn');
+const miniReset = document.getElementById('miniReset');
+const resetLabel = resetBtn.querySelector('.reset-label');
+let resetArmed = false, resetDisarmT = null;
+function disarmReset(){
+  resetArmed = false; clearTimeout(resetDisarmT);
+  if (resetLabel) resetLabel.textContent = 'Reset progress';
+  resetBtn.classList.remove('armed'); miniReset.classList.remove('armed');
+}
+function armReset(){
+  resetArmed = true;
+  if (resetLabel) resetLabel.textContent = 'Tap again to reset';
+  resetBtn.classList.add('armed'); miniReset.classList.add('armed');
+  clearTimeout(resetDisarmT); resetDisarmT = setTimeout(disarmReset, 2500);
+}
+function handleResetTap(){
+  if (resetArmed){ disarmReset(); resetAll(); } else { armReset(); }
+}
+resetBtn.addEventListener('click', handleResetTap);
+miniReset.addEventListener('click', handleResetTap);
+
+// roll the checklist over to a fresh day if the app was left open past midnight
+document.addEventListener('visibilitychange', ()=>{
+  if (document.visibilityState !== 'visible') return;
+  const today = new Date().toDateString();
+  if (state.day !== today){
+    state = { day: today, done: {} }; saveState();
+    clearDoneCards(); celebrated = false; recount();
+  }
+});
 
 /* ---------- reveal on scroll ---------- */
 const io = new IntersectionObserver((entries)=>{
@@ -781,12 +813,13 @@ function loadPhase(animateIn){
   if (animateIn){ plName.style.opacity = 0; setTimeout(()=>{ plName.style.opacity = 1; }, 180); }
   plName.textContent = d.name;
   plDose.textContent = d.dose;
-  plNote.innerHTML = d.why ? d.note + d.why : d.note;
+  plNote.innerHTML = d.why ? d.note + '<span class="why">'+d.why+'</span>' : d.note;
   plSide.textContent = d.sides === 2 ? (curSide === 0 ? 'Left side' : 'Right side') : '';
 
   remaining = d.dur;
   ringTime.textContent = fmt(remaining);
-  ringSub.textContent = d.sides === 2 ? (curSide===0?'1st side · '+d.dur+'s':'2nd side · '+d.dur+'s') : d.dur + 's';
+  const durLabel = d.dur >= 60 ? fmt(d.dur) : d.dur + 's';
+  ringSub.textContent = d.sides === 2 ? (curSide===0?'1st side · '+durLabel:'2nd side · '+durLabel) : durLabel;
   setRing(0);
   paintSegments();
 }
