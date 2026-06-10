@@ -1,9 +1,10 @@
 /* Mamba Stretch — service worker
    precache app shell, offline-first navigations, runtime-cache assets + fonts */
-const CACHE = 'mamba-v10';
+const CACHE = 'mamba-v11';
 const SHELL = [
   '/',
   '/index.html',
+  '/rehab',
   '/manifest.webmanifest',
   '/icon.svg',
   '/icon-192.png',
@@ -27,15 +28,17 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
 
-  // navigations: network-first, fall back to cached shell when offline
+  // navigations: network-first, cache per-URL, fall back to the matching
+  // cached page when offline (then the home shell as a last resort)
   if (req.mode === 'navigate') {
     e.respondWith(
       fetch(req)
         .then(res => {
-          caches.open(CACHE).then(c => c.put('/', res.clone()));
+          const copy = res.clone();
+          caches.open(CACHE).then(c => c.put(req, copy));
           return res;
         })
-        .catch(() => caches.match('/').then(r => r || caches.match('/index.html')))
+        .catch(() => caches.match(req).then(r => r || caches.match('/index.html')))
     );
     return;
   }
