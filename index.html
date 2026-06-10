@@ -33,7 +33,7 @@
     --good:#3ad29f;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;overflow-x:hidden;max-width:100%}
   body{
     background:
       radial-gradient(120% 60% at 80% -10%, rgba(243,180,37,.10), transparent 60%),
@@ -118,7 +118,7 @@
 
   /* ---------- PROGRESS BAR ---------- */
   .progress-wrap{
-    position:sticky;top:0;z-index:30;margin:0 -22px 0;
+    position:sticky;top:0;z-index:30;margin:0;
     padding:calc(8px + env(safe-area-inset-top)) 22px 8px;
     backdrop-filter:blur(14px);background:rgba(10,10,11,.74);
     border-bottom:1px solid var(--line);
