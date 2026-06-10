@@ -48,6 +48,7 @@
     text-rendering:optimizeLegibility;
   }
   button{touch-action:manipulation}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
   .grain{
     position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.04;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -135,7 +136,7 @@
   .pre-meter .progress-count b{color:var(--gold)}
   .post-meter .progress-count b{color:var(--post-soft)}
   .mini-reset{
-    background:transparent;border:none;color:#55565b;cursor:pointer;padding:5px;border-radius:8px;
+    background:transparent;border:none;color:var(--muted);cursor:pointer;padding:5px;border-radius:8px;
     display:grid;place-items:center;transition:.2s;
   }
   .mini-reset:hover{color:var(--paper);background:var(--panel-2)}
@@ -170,7 +171,6 @@
   .pre .card{--rail:var(--pre)}
   .post .card{--rail:var(--post)}
   .card:hover{border-color:var(--line-2);transform:translateX(3px)}
-  .card.active{border-color:var(--rail);box-shadow:0 0 0 1px var(--rail), 0 18px 40px -22px var(--rail)}
   .card.done{opacity:.5}
   .card.done .ex-name{text-decoration:line-through;text-decoration-color:var(--muted)}
 
@@ -200,6 +200,9 @@
   .timer-btn:hover{background:rgba(124,108,240,.15);border-color:var(--post)}
   .timer-btn.running{background:var(--post);color:#fff;border-color:var(--post)}
   .timer-btn .t{font-variant-numeric:tabular-nums;min-width:42px;text-align:left}
+  .pre .timer-btn{color:var(--gold);border-color:#4a3c14}
+  .pre .timer-btn:hover{background:rgba(243,180,37,.12);border-color:var(--gold)}
+  .pre .timer-btn.running{background:var(--gold);color:#1c1404;border-color:var(--gold)}
 
   /* ---------- TIP ---------- */
   .tip{
@@ -215,7 +218,7 @@
   .quote blockquote{font-family:'Anton',sans-serif;font-size:clamp(1.6rem,5vw,2.6rem);line-height:1.05;text-transform:uppercase;letter-spacing:.01em}
   .quote blockquote em{color:var(--gold);font-style:normal}
   .quote cite{display:block;margin-top:18px;color:var(--muted);font-style:normal;letter-spacing:.2em;text-transform:uppercase;font-size:.74rem}
-  footer{text-align:center;color:#55565b;font-size:.78rem;margin-top:46px;line-height:1.7}
+  footer{text-align:center;color:var(--muted);font-size:.78rem;margin-top:46px;line-height:1.7}
 
   /* ---------- REVEAL ON SCROLL ---------- */
   .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
@@ -312,7 +315,7 @@
   .player.stat-mode .pl-btn.main svg{fill:#fff}
   .player.stat-mode .ring .fg{stroke:var(--post)}
   .player.stat-mode .pl-dose{color:var(--post-soft)}
-  .pl-foot{text-align:center;padding-bottom:24px;color:#55565b;font-size:.74rem;letter-spacing:.04em}
+  .pl-foot{text-align:center;padding-bottom:24px;color:var(--muted);font-size:.74rem;letter-spacing:.04em}
   .pl-foot kbd{background:var(--panel-2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-family:inherit;color:var(--muted);font-size:.72rem}
 
   /* get-ready countdown */
@@ -347,7 +350,7 @@
     header{padding:44px 0 26px}
     .sub{font-size:1rem}
     .card{padding:16px 16px 16px 18px;gap:14px}
-    .progress-label,.meter-label{display:none}
+    .meter-label{display:none}
     .progress-wrap{gap:12px;padding:calc(11px + env(safe-area-inset-top)) 18px 11px}
     .meter{gap:9px}
     .progress-count{font-size:.95rem;min-width:40px}
@@ -399,6 +402,10 @@
       <span class="line"><span class="outline">Routine</span></span>
     </h1>
     <p class="sub">A Kobe-inspired flow: a <b>dynamic warm-up</b> that builds from gentle to explosive, and a <b>static cooldown</b> for recovery. Lower-body weighted, just like his. Tap each move to check it off — or run the guided session and go hands-free.</p>
+    <nav class="toc">
+      <a class="pre" href="#pre"><span class="dot"></span>Warm-Up</a>
+      <a class="post" href="#post"><span class="dot"></span>Cooldown</a>
+    </nav>
     <div class="cta-row">
       <button class="btn-primary" id="startPre">
         <svg viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></svg>
@@ -611,6 +618,8 @@ function makeCard(d, idx, isPost){
   card.className = 'card';
   card.dataset.id = d.id;
   const noteHTML = d.why ? d.note + '<span class="why">'+d.why+'</span>' : d.note;
+  // inline timer: every cooldown hold, plus long timed warm-up moves
+  const hasTimer = isPost || (d.sides === 1 && d.dur >= 60);
   card.innerHTML = `
     <div class="check" role="checkbox" tabindex="0" aria-checked="${isDone(d.id)}" aria-label="Mark ${d.name} done">${checkSVG}</div>
     <div class="ex-body">
@@ -619,7 +628,7 @@ function makeCard(d, idx, isPost){
         <div class="ex-dose">${d.dose}</div>
       </div>
       <div class="ex-note">${noteHTML}</div>
-      ${isPost ? '<button class="timer-btn"><span class="ic">▶</span> <span class="t">'+fmt(d.dur)+'</span> hold</button>' : ''}
+      ${hasTimer ? '<button class="timer-btn"><span class="ic">▶</span> <span class="t">'+fmt(d.dur)+'</span> '+(isPost?'hold':'timer')+'</button>' : ''}
     </div>`;
 
   if (isDone(d.id)) card.classList.add('done');
@@ -636,7 +645,7 @@ function makeCard(d, idx, isPost){
   checkEl.addEventListener('keydown', e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); toggle(); }});
   card.querySelector('.ex-name').addEventListener('click', toggle);
 
-  if (isPost){
+  if (hasTimer){
     const btn = card.querySelector('.timer-btn');
     const tEl = btn.querySelector('.t');
     const icEl = btn.querySelector('.ic');
@@ -713,11 +722,13 @@ function disarmReset(){
   resetArmed = false; clearTimeout(resetDisarmT);
   if (resetLabel) resetLabel.textContent = 'Reset progress';
   resetBtn.classList.remove('armed'); miniReset.classList.remove('armed');
+  miniReset.setAttribute('aria-label','Reset progress'); miniReset.title = 'Reset progress';
 }
 function armReset(){
   resetArmed = true;
   if (resetLabel) resetLabel.textContent = 'Tap again to reset';
   resetBtn.classList.add('armed'); miniReset.classList.add('armed');
+  miniReset.setAttribute('aria-label','Tap again to confirm reset'); miniReset.title = 'Tap again to confirm reset';
   clearTimeout(resetDisarmT); resetDisarmT = setTimeout(disarmReset, 2500);
 }
 function handleResetTap(){
@@ -797,9 +808,15 @@ function setRing(frac){ ringFg.setAttribute('stroke-dashoffset', RING_LEN * (1 -
 function paintSegments(){
   [...plTrack.children].forEach((seg,i)=>{
     const idx = sStart + i;
-    seg.classList.toggle('done', idx < cur);
-    seg.querySelector('i').style.width = idx < cur ? '100%' : '0%';
+    const segDone = idx < cur || isDone(all[idx].id);
+    seg.classList.toggle('done', segDone);
+    seg.querySelector('i').style.width = segDone ? '100%' : '0%';
   });
+}
+
+function paintCurrentSeg(frac){
+  const seg = plTrack.children[cur - sStart];
+  if (seg) seg.querySelector('i').style.width = (frac*100)+'%';
 }
 
 function loadPhase(animateIn){
@@ -822,6 +839,7 @@ function loadPhase(animateIn){
   ringSub.textContent = d.sides === 2 ? (curSide===0?'1st side · '+durLabel:'2nd side · '+durLabel) : durLabel;
   setRing(0);
   paintSegments();
+  paintCurrentSeg(d.sides === 2 && curSide === 1 ? .5 : 0);
 }
 
 function startTicker(){
@@ -832,6 +850,7 @@ function startTicker(){
     remaining--;
     ringTime.textContent = fmt(Math.max(remaining,0));
     setRing(1 - remaining / d.dur);
+    paintCurrentSeg(d.sides === 2 ? (curSide + (1 - remaining / d.dur)) / 2 : 1 - remaining / d.dur);
     if (remaining <= 3 && remaining > 0) tick();
     if (remaining <= 0){
       clearInterval(ticker);
@@ -934,7 +953,10 @@ function openPlayer(mode){
   sMode = mode;
   if (mode === 'post'){ sStart = pre.length; sEnd = total; }
   else { sStart = 0; sEnd = pre.length; }
-  cur = sStart; curSide = 0; running = false;
+  // resume at the first unchecked move; if everything's done, start fresh
+  cur = sStart;
+  for (let i = sStart; i < sEnd; i++){ if (!isDone(all[i].id)){ cur = i; break; } }
+  curSide = 0; running = false;
   buildTrack();
   player.classList.remove('complete');
   player.classList.add('open');
